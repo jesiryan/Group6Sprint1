@@ -32,7 +32,13 @@ public class ImsiQueryServlet extends HttpServlet{
 				noResultsFound(out);
 			}
 			else {
-				mid(out, callFailures);			
+				if(req.getParameter("userStoryNumber").equals("us4")){
+					midUS4(out, callFailures);
+				}
+				if(req.getParameter("userStoryNumber").equals("us6")){
+					System.out.println("user story 6");
+				}
+							
 			}
 		}
 		else {
@@ -60,7 +66,7 @@ public class ImsiQueryServlet extends HttpServlet{
 		out.println("                    </tr>");
     }
 	
-	private void mid(PrintWriter out, List<CallFailure> callFailures) {
+	private void midUS4(PrintWriter out, List<CallFailure> callFailures) {
 		int count=0;
 		out.println("                    <tr class='alt'>");
 		out.println("                      <td>IMSI Number:</td>");

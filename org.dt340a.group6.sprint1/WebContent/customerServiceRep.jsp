@@ -24,12 +24,14 @@
                 <h1>Call Investigation Assistant</h1> 
                 <h2>Group 6</h2> 
                 <h3>Customer Service Representative View</h3>
+                <h4>User Story 4</h4>
            
             </div>
             
            <div id='inner-container' >  
                 
               <form method=GET action='imsiQuery'>
+              	<input type='hidden' name='userStoryNumber' value='us4'>
                 <input class='submissionfield' type='text' name='username' placeholder='Please Enter an IMSI number Here' required='required'>
 				<input type='submit'>
                 <input Type='button' VALUE='Back' onClick='history.go(-1);return true;'>
