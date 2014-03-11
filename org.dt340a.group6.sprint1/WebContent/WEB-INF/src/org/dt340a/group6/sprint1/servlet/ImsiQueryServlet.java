@@ -22,28 +22,35 @@ public class ImsiQueryServlet extends HttpServlet{
 		res.setContentType("text/html");
 		PrintWriter out = res.getWriter();		
 		imsi = req.getParameter("username");
+		String currentStory = req.getParameter("userStoryNumber");
 		
 		IMSIQuery query = new IMSIQuery();
 		List<CallFailure> callFailures = query.viewInfoForIMSI(imsi);
 		
-		topText(out, req.getParameter("us4"));
+		topText(out, currentStory);
 		
 		if (PrimitiveCheck.isLong(imsi)) {
 			if (callFailures == null) {
 				noResultsFound(out);
 			}
 			else {
-				if(req.getParameter("userStoryNumber").equals("us4")){
+				if(currentStory.equals("us4")){
 					midUS4(out, callFailures);
 				}
-				if(req.getParameter("userStoryNumber").equals("us6")){
+				if(currentStory.equals("us6")){
+					Boolean found = false;
 					ArrayList<CallFailure> alreadySeenCallFailureCodes = new ArrayList<CallFailure>();
 					for(CallFailure currentCallFailure : callFailures){
 						for(CallFailure currentCF : alreadySeenCallFailureCodes){
-							if(currentCallFailure.getCause().getCauseCode() != currentCF.getCause().getCauseCode()){
-								alreadySeenCallFailureCodes.add(currentCF);
+							if(currentCallFailure.getCause().getCauseCode() == currentCF.getCause().getCauseCode()){
+								found = true;
+								break;
 							}
 						}
+						if(!found){
+							alreadySeenCallFailureCodes.add(currentCallFailure);
+						}
+						found = false;
 					}
 					midUS6(out, callFailures);
 					System.out.println("user story 6");
@@ -146,7 +153,7 @@ public class ImsiQueryServlet extends HttpServlet{
 		}
 	}
 	
-	private void topText(PrintWriter out, String storyNumber) {
+	private void topText(PrintWriter out, String currentStory) {
 		out.println("<html>");
 		out.println("    <head>");
 		out.println("       <title>Dt340a - Group 6</title>");
@@ -166,11 +173,11 @@ public class ImsiQueryServlet extends HttpServlet{
 		out.println("                <h1>Call Investigation Assistant</h1>");
 		out.println("                <h2>Group 6</h2>");
 		out.println("                <h3>Customer Service Representative View</h3>");
-		if(storyNumber.equals("us4")){
+		if(currentStory.equals("us4")){
 			out.println("                <h4>User Story 4</h4>");
 			out.println("                <h4> As Customer Service Rep. I want to display, for a given affected IMSI, <br>the Event ID and Cause Code for any / all failures affecting that IMSI</h4>");
 		}
-		else if(storyNumber.equals("us6")){
+		else if(currentStory.equals("us6")){
 			out.println("                <h4>User Story 6</h4>");
 			out.println("                <h4>As a customer service rep, I want to see, for a given IMSI, <br>all the unique cause codes associated with its call failures.</h4>");
 		}
