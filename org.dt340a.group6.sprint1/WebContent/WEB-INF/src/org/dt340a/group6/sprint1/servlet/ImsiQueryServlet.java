@@ -124,27 +124,21 @@ public class ImsiQueryServlet extends HttpServlet{
 		out.println("                    <tr class='alt'>");
 		out.println("                      <td>IMSI Number:</td>");
         out.println("                      <td>"+imsi+"</td>");
-        out.println("                      <td></td>");
 		out.println("                    </tr>");
-		out.println("                    <tr>");		
-		out.println("                      <th>*****</th>");
+		out.println("                    <tr>");
         out.println("                      <th>Cause Code</th>");
         out.println("                      <th>Description</th>");
 		out.println("                    </tr>");
 		for(CallFailure fail : callFailures){
 			
-			if (count%2==0) {
+			if (count%2-1==0) {
 				out.println("                    <tr>");
-
-				out.println("                      <td>" + "</td>");
                 out.println("                      <td>" + (int)fail.getCause().getCauseCode() + "</td>");
                 out.println("                      <td>" + fail.getCause().getDescription() + "</td>");
 				out.println("                    </tr>");
 			}
 			else {
 				out.println("                    <tr class='alt'>");
-
-				out.println("                      <td>" + "</td>");
 				out.println("                      <td>" + (int)fail.getCause().getCauseCode() + "</td>");
                 out.println("                      <td>" + fail.getCause().getDescription() + "</td>");
 				out.println("                    </tr>");
