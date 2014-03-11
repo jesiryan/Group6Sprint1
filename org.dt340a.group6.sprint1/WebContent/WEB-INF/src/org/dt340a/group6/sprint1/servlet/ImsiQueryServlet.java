@@ -58,8 +58,12 @@ public class ImsiQueryServlet extends HttpServlet{
 		}
 	}
 
-	private void userStory6Filling(PrintWriter out,
-			List<CallFailure> callFailures) {
+	private void userStory6Filling(PrintWriter out, List<CallFailure> callFailures) {
+		ArrayList<CallFailure> alreadySeenCallFailureCodes = findSingleInstanceOfEachCauseCode(callFailures);
+		queryTableUS6(out, alreadySeenCallFailureCodes);
+	}
+
+	public static ArrayList<CallFailure> findSingleInstanceOfEachCauseCode(List<CallFailure> callFailures) {
 		Boolean found = false;
 		ArrayList<CallFailure> alreadySeenCallFailureCodes = new ArrayList<CallFailure>();
 		alreadySeenCallFailureCodes.add(callFailures.get(0));
@@ -75,7 +79,7 @@ public class ImsiQueryServlet extends HttpServlet{
 			}
 			found = false;
 		}
-		queryTableUS6(out, alreadySeenCallFailureCodes);
+		return alreadySeenCallFailureCodes;
 	}
 	
 	private void notAValidImsi(PrintWriter out) {
@@ -195,8 +199,6 @@ public class ImsiQueryServlet extends HttpServlet{
 		out.println("            </div>");
 		out.println("            <div id='inner-container' >  ");
 		out.println("            <form method=GET action='imsiQuery'>");
-		out.println("               <input class='submissionfield' type='text' name='username' placeholder='Please Enter an IMSI number Here' required='required' >");
-		out.println("               <input type='submit'>");
 		out.println("               <input Type='button' VALUE='Back' onClick='history.go(-2);return true;'>");
 		out.println("            </form>");
 		out.println("            </div>");

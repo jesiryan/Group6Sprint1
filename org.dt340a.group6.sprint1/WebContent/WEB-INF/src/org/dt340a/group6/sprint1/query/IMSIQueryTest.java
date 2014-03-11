@@ -3,9 +3,9 @@ package org.dt340a.group6.sprint1.query;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-
 import org.dt340a.group6.sprint1.entity.CallFailure;
 import org.dt340a.group6.sprint1.entity.Equipment;
+import org.dt340a.group6.sprint1.servlet.ImsiQueryServlet;
 
 public class IMSIQueryTest {
 	
@@ -38,5 +38,11 @@ public class IMSIQueryTest {
 		assertFalse("Find first Callfailure .getiMSI for given IMSI, 310560000000012 should "
 				+ "return 310560000000012, not 4125", "4125".equals(result));
 	}
-
+	
+	@Test
+	public final void testTrueNoDuplicatesForUserStory6(){
+		IMSIQuery imsiQuery = new IMSIQuery();
+		ImsiQueryServlet.findSingleInstanceOfEachCauseCode(imsiQuery.viewInfoForIMSI("310560000000012"));
+		   
+	}
 }
