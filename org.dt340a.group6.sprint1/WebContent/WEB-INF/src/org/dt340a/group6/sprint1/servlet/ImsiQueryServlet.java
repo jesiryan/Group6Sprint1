@@ -40,6 +40,7 @@ public class ImsiQueryServlet extends HttpServlet{
 				if(currentStory.equals("us6")){
 					Boolean found = false;
 					ArrayList<CallFailure> alreadySeenCallFailureCodes = new ArrayList<CallFailure>();
+					alreadySeenCallFailureCodes.add(callFailures.get(0));
 					for(CallFailure currentCallFailure : callFailures){
 						for(CallFailure currentCF : alreadySeenCallFailureCodes){
 							if(currentCallFailure.getCause().getCauseCode() == currentCF.getCause().getCauseCode()){
@@ -52,7 +53,7 @@ public class ImsiQueryServlet extends HttpServlet{
 						}
 						found = false;
 					}
-					midUS6(out, callFailures);
+					midUS6(out, alreadySeenCallFailureCodes);
 					System.out.println("user story 6");
 				}
 				else{
