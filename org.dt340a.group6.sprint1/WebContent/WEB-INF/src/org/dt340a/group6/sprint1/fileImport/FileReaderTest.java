@@ -6,7 +6,6 @@ import org.junit.Test;
 
 public class FileReaderTest {
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetCellNumeric() {
 		FileReader fileReader = new FileReader("test.xls");

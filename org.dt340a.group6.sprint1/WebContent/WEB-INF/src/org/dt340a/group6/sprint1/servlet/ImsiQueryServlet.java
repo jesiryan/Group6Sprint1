@@ -16,6 +16,7 @@ import org.dt340a.group6.sprint1.validation.PrimitiveCheck;
 
 public class ImsiQueryServlet extends HttpServlet{
 	
+	private static final long serialVersionUID = 1L;
 	String imsi;
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException{

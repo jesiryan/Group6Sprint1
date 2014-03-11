@@ -157,6 +157,7 @@ public class PersistenceUtil implements Serializable {
  *******************************************************************/
 	public static List<Cause> findAllCauses() {
 		EntityManager em = emf.createEntityManager();
+		@SuppressWarnings("unchecked")
 		List<Cause> causes = (List<Cause>) em.createNamedQuery("Cause.findAll").getResultList();
 		em.close();
 
@@ -165,6 +166,7 @@ public class PersistenceUtil implements Serializable {
 	
 	public static List<Cause> findCausesByEventId(double eventId){
 		EntityManager em = emf.createEntityManager();
+		@SuppressWarnings("unchecked")
 		List<Cause> causes = (List<Cause>) em.createNamedQuery("Cause.findByEvent_id").setParameter("eventId", eventId).getResultList();
 		em.close();
 		
@@ -177,6 +179,7 @@ public class PersistenceUtil implements Serializable {
 	public static List<CallFailure> findCauseCode_EventIDByIMSI(String IMSI){
 		
 		EntityManager em = emf.createEntityManager();
+		@SuppressWarnings("unchecked")
 		List<CallFailure> callFailures = (List<CallFailure>) em.createNamedQuery("CallFailure.findByIMSI").setParameter("IMSI", IMSI).getResultList();
 		em.close();
 		

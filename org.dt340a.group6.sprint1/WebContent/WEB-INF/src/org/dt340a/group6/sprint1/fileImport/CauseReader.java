@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 
-import org.dt340a.group6.sprint1.persistence.PersistenceUtil;
 import org.dt340a.group6.sprint1.entity.Cause;
 
 public class CauseReader {

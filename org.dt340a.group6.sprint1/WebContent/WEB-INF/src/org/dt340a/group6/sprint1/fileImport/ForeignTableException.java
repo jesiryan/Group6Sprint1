@@ -2,6 +2,11 @@ package org.dt340a.group6.sprint1.fileImport;
 
 public class ForeignTableException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public ForeignTableException() {
 		// TODO Auto-generated constructor stub
 	}

@@ -1,6 +1,5 @@
 package org.dt340a.group6.sprint1.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AllMasterTableRows {

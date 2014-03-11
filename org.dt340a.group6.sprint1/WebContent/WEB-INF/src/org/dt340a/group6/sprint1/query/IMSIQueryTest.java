@@ -2,8 +2,6 @@ package org.dt340a.group6.sprint1.query;
 
 import static org.junit.Assert.*;
 
-import java.awt.List;
-
 import org.junit.Test;
 
 import org.dt340a.group6.sprint1.entity.CallFailure;

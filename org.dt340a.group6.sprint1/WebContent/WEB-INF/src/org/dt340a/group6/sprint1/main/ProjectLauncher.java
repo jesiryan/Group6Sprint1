@@ -1,6 +1,5 @@
 package org.dt340a.group6.sprint1.main;
 
-import org.dt340a.group6.sprint1.fileImport.CallFailureReader;
 import org.dt340a.group6.sprint1.persistence.PersistenceUtil;
 
 public class ProjectLauncher {
