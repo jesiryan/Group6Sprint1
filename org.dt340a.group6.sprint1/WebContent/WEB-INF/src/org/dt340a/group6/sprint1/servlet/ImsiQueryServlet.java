@@ -2,6 +2,7 @@ package org.dt340a.group6.sprint1.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -25,7 +26,7 @@ public class ImsiQueryServlet extends HttpServlet{
 		IMSIQuery query = new IMSIQuery();
 		List<CallFailure> callFailures = query.viewInfoForIMSI(imsi);
 		
-		topText(out);
+		topText(out, req.getParameter("us4"));
 		
 		if (PrimitiveCheck.isLong(imsi)) {
 			if (callFailures == null) {
@@ -36,9 +37,20 @@ public class ImsiQueryServlet extends HttpServlet{
 					midUS4(out, callFailures);
 				}
 				if(req.getParameter("userStoryNumber").equals("us6")){
+					ArrayList<CallFailure> alreadySeenCallFailureCodes = new ArrayList<CallFailure>();
+					for(CallFailure currentCallFailure : callFailures){
+						for(CallFailure currentCF : alreadySeenCallFailureCodes){
+							if(currentCallFailure.getCause().getCauseCode() != currentCF.getCause().getCauseCode()){
+								alreadySeenCallFailureCodes.add(currentCF);
+							}
+						}
+					}
+					midUS6(out, callFailures);
 					System.out.println("user story 6");
 				}
-							
+				else{
+					System.out.println("************PROBLEM****************");
+				}
 			}
 		}
 		else {
@@ -100,7 +112,41 @@ public class ImsiQueryServlet extends HttpServlet{
 		}
 	}
 	
-	private void topText(PrintWriter out) {
+	private void midUS6(PrintWriter out, List<CallFailure> callFailures) {
+		int count=0;
+		out.println("                    <tr class='alt'>");
+		out.println("                      <td>IMSI Number:</td>");
+        out.println("                      <td>"+imsi+"</td>");
+        out.println("                      <td></td>");
+		out.println("                    </tr>");
+		out.println("                    <tr>");		
+		out.println("                      <th>*****</th>");
+        out.println("                      <th>Cause Code</th>");
+        out.println("                      <th>Description</th>");
+		out.println("                    </tr>");
+		for(CallFailure fail : callFailures){
+			
+			if (count%2==0) {
+				out.println("                    <tr>");
+
+				out.println("                      <td>" + "</td>");
+                out.println("                      <td>" + (int)fail.getCause().getCauseCode() + "</td>");
+                out.println("                      <td>" + fail.getCause().getDescription() + "</td>");
+				out.println("                    </tr>");
+			}
+			else {
+				out.println("                    <tr class='alt'>");
+
+				out.println("                      <td>" + "</td>");
+				out.println("                      <td>" + (int)fail.getCause().getCauseCode() + "</td>");
+                out.println("                      <td>" + fail.getCause().getDescription() + "</td>");
+				out.println("                    </tr>");
+			}
+			count++;
+		}
+	}
+	
+	private void topText(PrintWriter out, String storyNumber) {
 		out.println("<html>");
 		out.println("    <head>");
 		out.println("       <title>Dt340a - Group 6</title>");
@@ -120,6 +166,14 @@ public class ImsiQueryServlet extends HttpServlet{
 		out.println("                <h1>Call Investigation Assistant</h1>");
 		out.println("                <h2>Group 6</h2>");
 		out.println("                <h3>Customer Service Representative View</h3>");
+		if(storyNumber.equals("us4")){
+			out.println("                <h4>User Story 4</h4>");
+			out.println("                <h4> As Customer Service Rep. I want to display, for a given affected IMSI, <br>the Event ID and Cause Code for any / all failures affecting that IMSI</h4>");
+		}
+		else if(storyNumber.equals("us6")){
+			out.println("                <h4>User Story 6</h4>");
+			out.println("                <h4>As a customer service rep, I want to see, for a given IMSI, <br>all the unique cause codes associated with its call failures.</h4>");
+		}
 		out.println("            </div>");
 		out.println("            <div id='inner-container' >  ");
 		out.println("            <form method=GET action='imsiQuery'>");
