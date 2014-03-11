@@ -34,31 +34,7 @@ public class ImsiQueryServlet extends HttpServlet{
 				noResultsFound(out);
 			}
 			else {
-				if(currentStory.equals("us4")){
-					midUS4(out, callFailures);
-				}
-				if(currentStory.equals("us6")){
-					Boolean found = false;
-					ArrayList<CallFailure> alreadySeenCallFailureCodes = new ArrayList<CallFailure>();
-					alreadySeenCallFailureCodes.add(callFailures.get(0));
-					for(CallFailure currentCallFailure : callFailures){
-						for(CallFailure currentCF : alreadySeenCallFailureCodes){
-							if(currentCallFailure.getCause().getCauseCode() == currentCF.getCause().getCauseCode()){
-								found = true;
-								break;
-							}
-						}
-						if(!found){
-							alreadySeenCallFailureCodes.add(currentCallFailure);
-						}
-						found = false;
-					}
-					midUS6(out, alreadySeenCallFailureCodes);
-					System.out.println("user story 6");
-				}
-				else{
-					System.out.println("************PROBLEM****************");
-				}
+				fillOutQueryReply(out, currentStory, callFailures);
 			}
 		}
 		else {
@@ -66,6 +42,39 @@ public class ImsiQueryServlet extends HttpServlet{
 		}
 		
 		bottomText(out);		
+	}
+
+	private void fillOutQueryReply(PrintWriter out, String currentStory,
+			List<CallFailure> callFailures) {
+		if(currentStory.equals("us4")){
+			queryTableUS4(out, callFailures);
+		}
+		if(currentStory.equals("us6")){
+			userStory6Filling(out, callFailures);
+		}
+		else{
+			out.println("Something went horribly wrong");
+		}
+	}
+
+	private void userStory6Filling(PrintWriter out,
+			List<CallFailure> callFailures) {
+		Boolean found = false;
+		ArrayList<CallFailure> alreadySeenCallFailureCodes = new ArrayList<CallFailure>();
+		alreadySeenCallFailureCodes.add(callFailures.get(0));
+		for(CallFailure currentCallFailure : callFailures){
+			for(CallFailure currentCF : alreadySeenCallFailureCodes){
+				if(currentCallFailure.getCause().getCauseCode() == currentCF.getCause().getCauseCode()){
+					found = true;
+					break;
+				}
+			}
+			if(!found){
+				alreadySeenCallFailureCodes.add(currentCallFailure);
+			}
+			found = false;
+		}
+		queryTableUS6(out, alreadySeenCallFailureCodes);
 	}
 	
 	private void notAValidImsi(PrintWriter out) {
@@ -86,8 +95,30 @@ public class ImsiQueryServlet extends HttpServlet{
 		out.println("                    </tr>");
     }
 	
-	private void midUS4(PrintWriter out, List<CallFailure> callFailures) {
+	private void queryTableUS4(PrintWriter out, List<CallFailure> callFailures) {
 		int count=0;
+		queryTableHeadersUS4(out);
+		for(CallFailure fail : callFailures){
+			
+			if (count%2==0) {
+				out.println("                    <tr>");
+				out.println("                      <td>" + (int)fail.getCause().getEventId() + "</td>");
+                out.println("                      <td>" + (int)fail.getCause().getCauseCode() + "</td>");
+                out.println("                      <td>" + fail.getCause().getDescription() + "</td>");
+				out.println("                    </tr>");
+			}
+			else {
+				out.println("                    <tr class='alt'>");
+				out.println("                      <td>" + (int)fail.getCause().getEventId() + "</td>");
+				out.println("                      <td>" + (int)fail.getCause().getCauseCode() + "</td>");
+                out.println("                      <td>" + fail.getCause().getDescription() + "</td>");
+				out.println("                    </tr>");
+			}
+			count++;
+		}
+	}
+
+	private void queryTableHeadersUS4(PrintWriter out) {
 		out.println("                    <tr class='alt'>");
 		out.println("                      <td>IMSI Number:</td>");
         out.println("                      <td>"+imsi+"</td>");
@@ -98,38 +129,11 @@ public class ImsiQueryServlet extends HttpServlet{
         out.println("                      <th>Cause Code</th>");
         out.println("                      <th>Description</th>");
 		out.println("                    </tr>");
-		for(CallFailure fail : callFailures){
-			
-			if (count%2==0) {
-				out.println("                    <tr>");
-
-				out.println("                      <td>" + (int)fail.getCause().getEventId() + "</td>");
-                out.println("                      <td>" + (int)fail.getCause().getCauseCode() + "</td>");
-                out.println("                      <td>" + fail.getCause().getDescription() + "</td>");
-				out.println("                    </tr>");
-			}
-			else {
-				out.println("                    <tr class='alt'>");
-
-				out.println("                      <td>" + (int)fail.getCause().getEventId() + "</td>");
-				out.println("                      <td>" + (int)fail.getCause().getCauseCode() + "</td>");
-                out.println("                      <td>" + fail.getCause().getDescription() + "</td>");
-				out.println("                    </tr>");
-			}
-			count++;
-		}
 	}
 	
-	private void midUS6(PrintWriter out, List<CallFailure> callFailures) {
+	private void queryTableUS6(PrintWriter out, List<CallFailure> callFailures) {
 		int count=0;
-		out.println("                    <tr class='alt'>");
-		out.println("                      <td>IMSI Number:</td>");
-        out.println("                      <td>"+imsi+"</td>");
-		out.println("                    </tr>");
-		out.println("                    <tr>");
-        out.println("                      <th>Cause Code</th>");
-        out.println("                      <th>Description</th>");
-		out.println("                    </tr>");
+		queryTableHeadersUS6(out);
 		for(CallFailure fail : callFailures){
 			
 			if (count%2-1==0) {
@@ -146,6 +150,17 @@ public class ImsiQueryServlet extends HttpServlet{
 			}
 			count++;
 		}
+	}
+
+	private void queryTableHeadersUS6(PrintWriter out) {
+		out.println("                    <tr class='alt'>");
+		out.println("                      <td>IMSI Number:</td>");
+        out.println("                      <td>"+imsi+"</td>");
+		out.println("                    </tr>");
+		out.println("                    <tr>");
+        out.println("                      <th>Cause Code</th>");
+        out.println("                      <th>Description</th>");
+		out.println("                    </tr>");
 	}
 	
 	private void topText(PrintWriter out, String currentStory) {
@@ -192,9 +207,9 @@ public class ImsiQueryServlet extends HttpServlet{
 		out.println("");
 		out.println("                </table>");
 		out.println("            </div>");
-		out.println("        </div>");
+		out.println("         </div>");
 		out.println("         <div id='eric-multi'>");
-		out.println("                       <img src='images/ebottomgrad.jpg' >");
+		out.println("              <img src='images/ebottomgrad.jpg' >");
 		out.println("         </div>");
 		out.println("    </body>");
 		out.println("</html>");
