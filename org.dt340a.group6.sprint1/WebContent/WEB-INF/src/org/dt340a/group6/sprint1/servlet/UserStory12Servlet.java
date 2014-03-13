@@ -43,33 +43,44 @@ public class UserStory12Servlet extends HttpServlet {
 			endDate = sdf.parse(request.getParameter("endDateTime"));
 		} catch (ParseException e) { e.printStackTrace();}
 		
-		
+		System.out.println("Start date: "+request.getParameter("startDateTime")+ "  " +startDate);
+		System.out.println("End date: "+request.getParameter("endDateTime")+ "  " +endDate);
 		
 		String currentStory = request.getParameter("userStoryNumber");
 		
 		UserStory12Query query = new UserStory12Query();
-		List<CallFailure> resultsList = query.findAllBetween(startDate, endDate);
+		List<CallFailure> resultsList = null;
+		resultsList = query.findAllBetween(startDate, endDate);
 		
 		beginHTMLPrintout(out, currentStory);
 		
-		ArrayList<UserStory12Object> resultsWanted = new ArrayList<>();
-		String currentImsi = resultsList.get(0).getiMSI();
-		int count = 0;
-		
-		for(CallFailure cf : resultsList){
-			if(!cf.getiMSI().equals(currentImsi)){
-				resultsWanted.add(new UserStory12Object(cf.getiMSI(), count));
-				count = 0;
-			}
-			else{
-				count++;
-			}
-			currentImsi = cf.getiMSI();
+		if(startDate.after(endDate)){
+			notValidDateRange(out);
 		}
-		
-		sortTheArrayListOfUserStory12Objects(resultsWanted);
-		
-		queryTableUS12(out, resultsWanted);
+		else{
+			if (resultsList == null) {
+				noResultsFound(out);
+			}
+			else {
+				ArrayList<UserStory12Object> resultsWanted = new ArrayList<>();
+				String currentImsi = resultsList.get(0).getiMSI();
+				int count = 0;
+				for(CallFailure cf : resultsList){
+					if(!cf.getiMSI().equals(currentImsi)){
+						resultsWanted.add(new UserStory12Object(cf.getiMSI(), count));
+						count = 0;
+					}
+					else{
+						count++;
+					}
+					currentImsi = cf.getiMSI();
+				}
+				
+				sortTheArrayListOfUserStory12Objects(resultsWanted);
+				
+				queryTableUS12(out, resultsWanted);
+			}
+		}
 		
 		endHTMLPrintout(out);
 	}
@@ -231,4 +242,29 @@ public class UserStory12Servlet extends HttpServlet {
 		out.println("</html>");
 	}
 	
+	/**
+	 * If no results are found call this method to print the informational HTML
+	 * @param out PrintWriter
+	 */
+	private void noResultsFound(PrintWriter out) {
+		out.println("                    <tr>");
+		out.println("                      <td>Information Message:</td>");
+		out.println("                    </tr>");
+		out.println("                    <tr>");
+		out.println("                      <td>This search has returned 0 results for Time Range selected</td>");
+		out.println("                    </tr>");
+    }	
+	
+	/**
+	 * If no results are found call this method to print the informational HTML
+	 * @param out PrintWriter
+	 */
+	private void notValidDateRange(PrintWriter out) {
+		out.println("                    <tr>");
+		out.println("                      <td>Information Message:</td>");
+		out.println("                    </tr>");
+		out.println("                    <tr>");
+		out.println("                      <td>Date Range is invalid</td>");
+		out.println("                    </tr>");
+    }	
 }
