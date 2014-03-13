@@ -72,21 +72,6 @@ public class UserStory12Servlet extends HttpServlet {
 		
 		queryTableUS12(out, resultsWanted);
 		
-//		if(resultsWanted.size()<=10){
-//			for(UserStory12Object uso : resultsWanted){
-//				out.println("uso: imsi: " + uso.getImsi() + " count: " + uso.getCount()+"<br>");
-//			}
-//		}
-//		else{
-//			int i = 0;
-//			for(UserStory12Object uso : resultsWanted){
-//				out.println("uso: imsi: " + uso.getImsi() + " count: " + uso.getCount()+"<br>");
-//				if(i >= 10){
-//					break;
-//				}
-//			}
-//		}
-		
 		endHTMLPrintout(out);
 	}
 
