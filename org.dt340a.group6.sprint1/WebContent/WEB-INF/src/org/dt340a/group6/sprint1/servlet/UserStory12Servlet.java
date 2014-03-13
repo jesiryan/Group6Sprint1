@@ -1,5 +1,8 @@
 package org.dt340a.group6.sprint1.servlet;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.dt340a.group6.sprint1.entity.CallFailure;
+import org.dt340a.group6.sprint1.query.UserStory12Object;
 import org.dt340a.group6.sprint1.query.UserStory12Query;
 
 /**
@@ -45,16 +49,58 @@ public class UserStory12Servlet extends HttpServlet {
 		String currentStory = request.getParameter("userStoryNumber");
 		
 		UserStory12Query query = new UserStory12Query();
-		List<CallFailure> resultsList = query.findAllIMSIsWithCallFailureGivenTime(startDate, endDate);
-		
+		List<CallFailure> resultsList = query.findAllBetween(startDate, endDate);
 		
 		beginHTMLPrintout(out, currentStory);
 		
+		ArrayList<UserStory12Object> resultsWanted = new ArrayList<>();
+		String currentImsi = resultsList.get(0).getiMSI();
+		int count = 0;
+		
 		for(CallFailure cf : resultsList){
-			System.out.println(cf.getiMSI());
+			if(!cf.getiMSI().equals(currentImsi)){
+				resultsWanted.add(new UserStory12Object(cf.getiMSI(), count));
+				count = 0;
+			}
+			else{
+				count++;
+			}
+			currentImsi = cf.getiMSI();
 		}
 		
+		sortTheArrayListOfUserStory12Objects(resultsWanted);
+		
+		queryTableUS12(out, resultsWanted);
+		
+//		if(resultsWanted.size()<=10){
+//			for(UserStory12Object uso : resultsWanted){
+//				out.println("uso: imsi: " + uso.getImsi() + " count: " + uso.getCount()+"<br>");
+//			}
+//		}
+//		else{
+//			int i = 0;
+//			for(UserStory12Object uso : resultsWanted){
+//				out.println("uso: imsi: " + uso.getImsi() + " count: " + uso.getCount()+"<br>");
+//				if(i >= 10){
+//					break;
+//				}
+//			}
+//		}
+		
 		endHTMLPrintout(out);
+	}
+
+	private void sortTheArrayListOfUserStory12Objects(ArrayList<UserStory12Object> resultsWanted) {
+		Collections.sort(resultsWanted, new Comparator<UserStory12Object>() {
+		    @Override
+		    public int compare(UserStory12Object uso1, UserStory12Object uso2) {
+		        if (uso1.getCount() < uso2.getCount())
+		            return 1;
+		        if (uso1.getCount() > uso2.getCount())
+		            return -1;
+		        return 0;
+		    }
+		});
 	}
 
 	/**
@@ -64,6 +110,60 @@ public class UserStory12Servlet extends HttpServlet {
 		
 	}
 
+	
+	/**
+	 * Print out the results for user story 6 in a table
+	 * @param out
+	 * @param results
+	 */
+	private void queryTableUS12(PrintWriter out, ArrayList<UserStory12Object> results) {
+		int count=0;
+		queryTableHeadersUS12(out);
+		
+		for(UserStory12Object uso : results){
+			if (count%2-1==0) {
+				out.println("                    <tr>");
+                fillRowUS12(out, uso);
+			}
+			else {
+				out.println("                    <tr class='alt'>");
+				fillRowUS12(out, uso);
+			}
+			count++;
+			if(count >= 10){
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * Fill in the two columns for the row <br> (for user story 6)
+	 * @param out PrintWriter
+	 * @param fail CallFailure
+	 */
+	private void fillRowUS12(PrintWriter out, UserStory12Object uso) {
+		out.println("                      <td>" + uso.getImsi() + "</td>");
+		out.println("                      <td>" + uso.getCount() + "</td>");
+		out.println("                    </tr>");
+	}
+	
+	/**
+	 * HTML printout for the headings of the results table for user story 6
+	 * @param out
+	 */
+	private void queryTableHeadersUS12(PrintWriter out) {
+		out.println("                    <tr class='alt'>");
+		out.println("                      <td> </td>");
+        out.println("                      <td> </td>");
+		out.println("                    </tr>");
+		out.println("                    <tr>");
+        out.println("                      <th>IMSI</th>");
+        out.println("                      <th>Number of Failures</th>");
+		out.println("                    </tr>");
+	}
+	
+	
+	
 	/**
 	 * Begin the HTML printout for the page <br> (up until the result display section)
 	 * @param out PrintWriter

@@ -12,8 +12,13 @@ import javax.persistence.NamedQuery;
 
 @NamedQueries({
  @NamedQuery(name = "CallFailure.findByIMSI", query = "select o from CallFailure o where o.iMSI=:IMSI"),
+ @NamedQuery(name = "CallFailure.findAll", query = "select o from CallFailure o order by o.iMSI"),
+ @NamedQuery(name = "CallFailure.findAllBetween", query = "select o from CallFailure o where o.dateTime between :startDateTime and :endDateTime order by o.iMSI"),
+ @NamedQuery(name = "CallFailure.findCountOfOccurancesForGivenIMSI", query = "select count(*) from CallFailure o where o.iMSI=:IMSI"),
+// @NamedQuery(name = "CallFailure.findAllBetweenCountOfEach", query = "select new List(o.imsi, count(o)) from (select o from CallFailure o where o.dateTime between :startDateTime and :endDateTime order by o.iMSI) group by iMSI"),
+ // @NamedQuery(name = "CallFailure.findAllBetweenCountOfEach", query = "select imsi, count(*) from (select o from CallFailure o where o.dateTime between :startDateTime and :endDateTime order by o.iMSI) group by iMSI"),
  //USER STORY 12 : select IMSI, dateTime from (select IMSI, dateTime from callfailure o where o.dateTime > '2013-01-11 17:15:00' group by iMSI) b where b.dateTime < '2013-01-11 17:18:00';
- @NamedQuery(name = "CallFailure.findAllIMSIsWithCallFailureGivenTime", query = "select b.imsi, b.dateTime from (select a.iMSI, a.dateTime from CallFailure a where a.dateTime>:startDateTime group by a.iMSI) b where b.dateTime<:endDateTime"),
+// @NamedQuery(name = "CallFailure.findAllIMSIsWithCallFailureGivenTime", query = "select b.imsi, b.dateTime from (select a.iMSI, a.dateTime from CallFailure a where a.dateTime>:startDateTime group by a.iMSI) b where b.dateTime<:endDateTime"),
 })
 
 @Entity
