@@ -1,5 +1,6 @@
 package org.dt340a.group6.sprint1.servlet;
 
+import java.util.List;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.dt340a.group6.sprint1.entity.CallFailure;
+import org.dt340a.group6.sprint1.query.UserStory12Query;
 
 /**
  * Servlet implementation class User12Servlet
@@ -42,11 +44,16 @@ public class UserStory12Servlet extends HttpServlet {
 		
 		String currentStory = request.getParameter("userStoryNumber");
 		
-//		IMSIQuery query = new IMSIQuery();
-//		List<CallFailure> callFailures = query.viewInfoForIMSI(imsi);
+		UserStory12Query query = new UserStory12Query();
+		List<CallFailure> resultsList = query.findAllIMSIsWithCallFailureGivenTime(startDate, endDate);
+		
 		
 		beginHTMLPrintout(out, currentStory);
-
+		
+		for(CallFailure cf : resultsList){
+			System.out.println(cf.getiMSI());
+		}
+		
 		endHTMLPrintout(out);
 	}
 

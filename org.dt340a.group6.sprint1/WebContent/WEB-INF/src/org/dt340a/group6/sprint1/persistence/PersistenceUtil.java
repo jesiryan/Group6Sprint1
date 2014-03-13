@@ -1,6 +1,7 @@
 package org.dt340a.group6.sprint1.persistence;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -181,6 +182,18 @@ public class PersistenceUtil implements Serializable {
 		EntityManager em = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
 		List<CallFailure> callFailures = (List<CallFailure>) em.createNamedQuery("CallFailure.findByIMSI").setParameter("IMSI", IMSI).getResultList();
+		em.close();
+		
+		if (callFailures.size() == 0)
+			return null;
+		else 
+			return callFailures;
+	}
+
+	public static List<CallFailure> findAllIMSIsWithCallFailureGivenTime(Date startDateTime, Date endDateTime) {
+		EntityManager em = emf.createEntityManager();
+		@SuppressWarnings("unchecked")
+		List<CallFailure> callFailures = (List<CallFailure>) em.createNamedQuery("CallFailure.findAllIMSIsWithCallFailureGivenTime").setParameter("startDateTime", startDateTime).setParameter("endDateTime", endDateTime).getResultList();
 		em.close();
 		
 		if (callFailures.size() == 0)
