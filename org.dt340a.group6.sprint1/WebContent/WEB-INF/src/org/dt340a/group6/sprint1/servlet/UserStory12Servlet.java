@@ -43,8 +43,6 @@ public class UserStory12Servlet extends HttpServlet {
 			endDate = sdf.parse(request.getParameter("endDateTime"));
 		} catch (ParseException e) { e.printStackTrace();}
 		
-		System.out.println("Start date: "+request.getParameter("startDateTime")+ "  " +startDate);
-		System.out.println("End date: "+request.getParameter("endDateTime")+ "  " +endDate);
 		
 		String currentStory = request.getParameter("userStoryNumber");
 		
