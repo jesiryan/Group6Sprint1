@@ -2,8 +2,9 @@ package org.dt340a.group6.sprint1.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.dt340a.group6.sprint1.entity.CallFailure;
-import org.dt340a.group6.sprint1.query.IMSIQuery;
-import org.dt340a.group6.sprint1.validation.PrimitiveCheck;
 
 /**
  * Servlet implementation class User12Servlet
@@ -31,9 +30,19 @@ public class UserStory12Servlet extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();		
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
+		
+		try {
+			startDate = sdf.parse(request.getParameter("startDateTime"));
+			endDate = sdf.parse(request.getParameter("endDateTime"));
+		} catch (ParseException e) { e.printStackTrace();}
+		
+		System.out.println("Start date: "+request.getParameter("startDateTime")+ "  " +startDate);
+		System.out.println("End date: "+request.getParameter("endDateTime")+ "  " +endDate);
+		
 		String currentStory = request.getParameter("userStoryNumber");
 		
-		IMSIQuery query = new IMSIQuery();
+//		IMSIQuery query = new IMSIQuery();
 //		List<CallFailure> callFailures = query.viewInfoForIMSI(imsi);
 		
 		beginHTMLPrintout(out, currentStory);
@@ -84,7 +93,7 @@ public class UserStory12Servlet extends HttpServlet {
 	
 	/**
 	 * Starts the generic body of the html
-	 * @param out
+	 * @param out PrintWriter
 	 */
 	private void startBody(PrintWriter out) {
 		out.println("    <body>");
