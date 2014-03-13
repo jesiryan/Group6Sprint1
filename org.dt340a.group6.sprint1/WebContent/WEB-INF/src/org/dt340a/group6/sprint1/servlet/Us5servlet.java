@@ -88,6 +88,8 @@ public class Us5servlet extends HttpServlet {
 	}
 
 	private void notAValidImsi(PrintWriter out) {
+		out.println("            <div id='inner-container'>");
+		out.println("                <table id='customers'>");
 		out.println("                    <tr>");
 		out.println("                      <td>Warning Message:</td>");
 		out.println("                    </tr>");
@@ -95,9 +97,14 @@ public class Us5servlet extends HttpServlet {
 		out.println("                      <td>The value '" + imsi
 				+ "' is not a valid IMSI. Please enter a valid IMSI.</td>");
 		out.println("                    </tr>");
+
+		out.println("                </table>");
+		out.println("            </div>");
 	}
 
 	private void noResultsFound(PrintWriter out) {
+		out.println("            <div id='inner-container'>");
+		out.println("                <table id='customers'>");
 		out.println("                    <tr>");
 		out.println("                      <td>Information Message:</td>");
 		out.println("                    </tr>");
@@ -105,6 +112,9 @@ public class Us5servlet extends HttpServlet {
 		out.println("                      <td>This search has returned 0 results for IMSI: "
 				+ imsi + " </td>");
 		out.println("                    </tr>");
+
+		out.println("                </table>");
+		out.println("            </div>");
 	}
 
 	private void topText(PrintWriter out) {
@@ -136,8 +146,7 @@ public class Us5servlet extends HttpServlet {
 
 	private void mid(PrintWriter out, List<CallFailure> callFailures) {
 		int count = 0;
-		
-		
+
 		out.println("            <div id='inner-container'>");
 		out.println("                <table id='customers'>");
 		out.println("                    <tr class ='alt'>");
@@ -157,7 +166,6 @@ public class Us5servlet extends HttpServlet {
 
 		}
 
-		
 		out.println("                     <tr >");
 		out.println("                     <td>" + imsi + "</td>");
 		out.println("                      <td>" + startDate.toString()
@@ -178,14 +186,20 @@ public class Us5servlet extends HttpServlet {
 		out.println("<form method=GET action='Us5servlet'>");
 		out.println("<h4>Total Call Failures Over Time </h4>");
 
-		out.println("<input class='submissionfield' type='text' name='username' value="+ imsi +" placeholder='Please Enter an IMSI number Here' required='required'>");
+		out.println("<input class='submissionfield' type='text' name='username' value="
+				+ imsi
+				+ " placeholder='Please Enter an IMSI number Here' required='required'>");
 		out.println("<br/>");
 		out.println("<br/>");
 		out.println("<label for='startDate'>Start Date</label>");
-		out.println("<input type='datetime-local' name='startDate' value="+ startDateString +" placeholder='Please Enter a start date Here' id='date' />");
+		out.println("<input type='datetime-local' name='startDate' value="
+				+ startDateString
+				+ " placeholder='Please Enter a start date Here' id='date' />");
 
 		out.println("<label for='endDate'>End Date</label>");
-		out.println("<input type='datetime-local' name='endDate' value="+ endDateString +" placeholder='Please Enter end date Here' id='date' /> ");
+		out.println("<input type='datetime-local' name='endDate' value="
+				+ endDateString
+				+ " placeholder='Please Enter end date Here' id='date' /> ");
 		out.println("<input type='submit'>");
 		out.println("<input Type='button' VALUE='Back' onClick='history.go(-1);return true;'>");
 		out.println("</form>");
