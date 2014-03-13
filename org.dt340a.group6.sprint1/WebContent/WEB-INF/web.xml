@@ -25,4 +25,12 @@
     <servlet-name>fileUpload</servlet-name>
     <url-pattern>/fileUpload</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>UserStory12Servlet</servlet-name>
+    <servlet-class>org.dt340a.group6.sprint1.servlet.UserStory12Servlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserStory12Servlet</servlet-name>
+    <url-pattern>/UserStory12Servlet</url-pattern>
+  </servlet-mapping>
 </web-app>
